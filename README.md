@@ -4,7 +4,7 @@
 *****
 
 <p align="center">
-  <img width="640px" src=".README/todoapp_client.png">
+  <img width="640px" src="https://user-images.githubusercontent.com/34737952/184406662-5bfd5faa-af56-45f5-b8aa-81d5f64d01ec.png">
 </p>
 
 ## 클라이언트 기능
