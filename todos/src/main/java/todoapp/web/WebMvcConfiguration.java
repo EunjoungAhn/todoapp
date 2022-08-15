@@ -15,6 +15,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	// 리소스 핸들러를 등록해서 정적 자원을 처리할 수 있다.
+    	
+    	//registry.addResourceHandler("/assets/**").addResourceLocations("classpath:assets/");
+    	
+    	//여러 자원도 한번에 등록 가능하다.
+    	registry.addResourceHandler("/assets/**")
+    	.addResourceLocations("assets/", "classpath:assets/");
 	}
 
 	@Override
