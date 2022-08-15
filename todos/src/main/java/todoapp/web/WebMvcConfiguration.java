@@ -1,5 +1,6 @@
 package todoapp.web;
 
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
@@ -10,8 +11,13 @@ import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
  * @author springrunner.kr@gmail.com
  */
 public class WebMvcConfiguration implements WebMvcConfigurer {
-
+	
     @Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	// 리소스 핸들러를 등록해서 정적 자원을 처리할 수 있다.
+	}
+
+	@Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         // registry.enableContentNegotiation();
         // 위와 같이 직접 설정하면, 스프링부트가 구성한 ContentNegotiatingViewResolver 전략이 무시된다.
