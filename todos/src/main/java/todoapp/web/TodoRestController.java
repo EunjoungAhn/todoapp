@@ -1,6 +1,5 @@
 package todoapp.web;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +19,6 @@ public class TodoRestController {
 
 	@RequestMapping("/api/todos")
 	public List<Todo> list(){
-		return Collections.emptyList();
+		return finder.getAll();
 	}
 }
