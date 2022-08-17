@@ -19,8 +19,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     	//registry.addResourceHandler("/assets/**").addResourceLocations("classpath:assets/");
     	
     	//여러 자원도 한번에 등록 가능하다.
+    	/*
     	registry.addResourceHandler("/assets/**")
     	.addResourceLocations("assets/", "classpath:assets/");
+    	*/
 	}
 
 	@Override
