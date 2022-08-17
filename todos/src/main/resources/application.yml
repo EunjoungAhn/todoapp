@@ -1,3 +1,6 @@
+site:
+  author: 스프링러너1
+
 logging:
   level:
    todoapp: debug
