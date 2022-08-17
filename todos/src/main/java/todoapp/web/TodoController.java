@@ -16,6 +16,7 @@ public class TodoController {
 	
 	private Environment environment;
 	private String siteAuthor;
+	private SiteProperties siteProperties;
 	
 	/*생성자를 통해서 의존 관계 주입 후, 외부 설정값 가지고 오기
 	public TodoController(Environment environment) {
@@ -24,21 +25,22 @@ public class TodoController {
 	*/
 	
 	//애노테이션으로 설정값 가져오기
-	public TodoController(Environment environment, @Value("${site.author}") String sitAuthor) {
+	public TodoController(Environment environment, @Value("${site.author}") String sitAuthor, SiteProperties siteProperties) {
 		this.environment = environment;
 		this.siteAuthor = sitAuthor;
+		this.siteProperties = siteProperties;
 	}
 	
 	//웹 요청을 처리하기 위한 핸들러를 작성
 	@RequestMapping("/todos")
 	public ModelAndView todos() throws Exception {
-		SiteProperties site = new SiteProperties();
+		//SiteProperties site = new SiteProperties();
 		//site.setAuthor(environment.getProperty("site.author"));
-		site.setAuthor(siteAuthor);
-		site.setDescription("스프링 MVC 할 일 관리 앱");
+		//site.setAuthor(siteAuthor);
+		//site.setDescription("스프링 MVC 할 일 관리 앱");
 		
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("site", site);
+		mav.addObject("site", siteProperties);
 		mav.setViewName("todos");
 		
 		//ViewResolver viewResolver = new InternalResourceViewResolver();
