@@ -35,10 +35,12 @@ public class TodoController {
 		this.finder = finder;
 	}
 	
+	/*
 	@ModelAttribute("site")
 	public SiteProperties siProperties() {
 		return siteProperties;
 	}
+	*/
 	
 	//웹 요청을 처리하기 위한 핸들러를 작성
 	@RequestMapping("/todos")
