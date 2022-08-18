@@ -6,6 +6,15 @@ site:
   author: SpringRunner
   description: What're your plans today?
 
+server:
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+  error:
+   include-message: always
+   include-binding-errors: always
+
 logging:
   level:
    todoapp: debug
