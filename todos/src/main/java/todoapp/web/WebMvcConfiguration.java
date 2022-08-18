@@ -1,9 +1,12 @@
 package todoapp.web;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+
+import todoapp.web.TodoController.TodoCsvViewResolver.TodoCsvView;
 
 /**
  * Spring Web MVC 설정
@@ -27,10 +30,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
 	@Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
+		//registry.viewResolver(new TodoController.TodoCsvViewResolver());
+		
         // registry.enableContentNegotiation();
         // 위와 같이 직접 설정하면, 스프링부트가 구성한 ContentNegotiatingViewResolver 전략이 무시된다.
     }
 
+	@Bean(name = "todos")
+	public TodoCsvView todoCsvView() {
+		return new TodoCsvView();
+	}
+	
     /**
      * 스프링부트가 생성한 ContentNegotiatingViewResolver를 조작할 목적으로 작성된 컴포넌트
      */
