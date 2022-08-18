@@ -1,7 +1,10 @@
 todos:
   data:
     initialize: true
-
+  feature:
+    toggles: 
+      auth: true
+      
 site:
   author: SpringRunner
   description: What're your plans today?
