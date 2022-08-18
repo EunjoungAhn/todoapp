@@ -6,6 +6,7 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -54,10 +55,16 @@ public class ReadableErrorAttributes implements ErrorAttributes, HandlerExceptio
         	// Exception.TodoEntityNotFoundException
         	// Exception.MethodArgumentNotValidException
         	
-        	//분기문을 이용하지 않고, 규칙으로 정의해서 처리하기 
-        	String errorCode = String.format("Exception.%s", error.getClass().getSimpleName());
-        	//String errorMessage = environment.getProperty(errorCode, error.getMessage());
-        	String errorMessage = messageSource.getMessage(errorCode, new Object[0], error.getMessage(), webRequest.getLocale());
+        	String errorMessage = error.getMessage();
+        	if (MessageSourceResolvable.class.isAssignableFrom(error.getClass())) {
+        		errorMessage = messageSource.getMessage((MessageSourceResolvable) error, webRequest.getLocale());
+        	}else {
+        		//분기문을 이용하지 않고, 규칙으로 정의해서 처리하기 
+        		String errorCode = String.format("Exception.%s", error.getClass().getSimpleName());
+        		//String errorMessage = environment.getProperty(errorCode, error.getMessage());
+        		errorMessage = messageSource.getMessage(errorCode, new Object[0], error.getMessage(), webRequest.getLocale());
+        	}
+        	
         	
         	attributes.put("message", errorMessage);
         	

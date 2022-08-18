@@ -5,7 +5,7 @@ package todoapp.core.todos.domain;
  *
  * @author springrunner.kr@gmail.com
  */
-public class TodoEntityNotFoundException extends TodoEntityException {
+public class TodoEntityNotFoundException extends TodoEntityException{
 
     private static final long serialVersionUID = 1L;
     
@@ -19,5 +19,12 @@ public class TodoEntityNotFoundException extends TodoEntityException {
     public Long getId() {
         return id;
     }
+
+    //삭제를 하려는 할일의 id 값을 가져오는 오류 메시지 설정
+	@Override
+	public Object[] getArguments() {
+		//스프링이 제공하는 메세지 소스에서는 숫자값이 넘어가면 콤마와 같은 처리를 함으로 스트링으로 감싸준다.
+		return new Object[] { String.valueOf(id) };
+	}
 
 }
