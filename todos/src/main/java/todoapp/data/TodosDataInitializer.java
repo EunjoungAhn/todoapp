@@ -23,18 +23,18 @@ public class TodosDataInitializer implements InitializingBean, ApplicationRunner
 	//스프링 프레임워크가 제공하는 데이터를 초기화 시켜주는 작업
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		todoRepository.save(Todo.create("Task one"));
+		todoRepository.save(Todo.create("Task one1"));
 	}
 
 	//스프링 부트가 제공하는 데이터 초기화 방법
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		todoRepository.save(Todo.create("Task two"));
+		todoRepository.save(Todo.create("Task two2"));
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		todoRepository.save(Todo.create("Task three"));
+		todoRepository.save(Todo.create("Task three3"));
 	}
 	
 	

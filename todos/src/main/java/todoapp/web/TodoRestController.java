@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ import todoapp.core.todos.application.TodoFinder;
 import todoapp.core.todos.domain.Todo;
 
 @RestController
+@RequestMapping("/api/todos") //클래스 레벨에서 @RequestMapping을 하면 상속 관계 처럼 동작한다.
 public class TodoRestController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -37,13 +39,13 @@ public class TodoRestController {
 		this.editor = editor;
 	}
 
-	@GetMapping("/api/todos")
+	@GetMapping
 	public List<Todo> list(){
 		return finder.getAll();
 	}
 	
 	//등록 핸들러
-	@PostMapping("/api/todos") //서버로 보낸 요청 정보를 @RequestBody로 받기
+	@PostMapping //서버로 보낸 요청 정보를 @RequestBody로 받기
 	@ResponseStatus(HttpStatus.CREATED) // 핸들러가 정상적으로 잘 수행이 됐을때 보내는 201값
 	public void create(@RequestBody @Valid WriteTodoCommand command) {
 		logger.debug("requeest command: {}", command);
@@ -52,7 +54,7 @@ public class TodoRestController {
 	}
 	
 	//수정 핸들러
-	@PutMapping("api/todos/{id}") // 문자열 타입을 롱 타입으로 변경하는 작업이 일어난다.
+	@PutMapping("/{id}") // 문자열 타입을 롱 타입으로 변경하는 작업이 일어난다.
 	public void update(@PathVariable("id") Long id, @RequestBody @Valid WriteTodoCommand command) {
 		logger.debug("request update id: {}, command: {}", id, command);
 		
@@ -60,7 +62,7 @@ public class TodoRestController {
 	}
 	
 	//삭제 핸들러
-	@DeleteMapping("api/todos/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Long id) {
 		logger.debug("request delete id: {}", id);
 		
