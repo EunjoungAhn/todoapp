@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +59,13 @@ public class TodoRestController {
 		editor.update(id, command.getTitle(), command.isCompleted());
 	}
 	
+	//삭제 핸들러
+	@DeleteMapping("api/todos/{id}")
+	public void delete(@PathVariable("id") Long id) {
+		logger.debug("request delete id: {}", id);
+		
+		editor.delete(id);
+	}
 	
 	//추후 서버로 부터 웹 요청정보를 입력 받는 데이터가 json에서 xml 또는 문자열 값을 받을때
 	//어떤 특정 자료구조 형식 또는 맵 형식 말고 좀 더 구체적으로 명시해 주는 것이 좋다. 
