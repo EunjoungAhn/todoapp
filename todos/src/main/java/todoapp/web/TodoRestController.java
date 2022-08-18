@@ -3,6 +3,10 @@ package todoapp.web;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -37,7 +41,7 @@ public class TodoRestController {
 	
 	@PostMapping("/api/todos") //서버로 보낸 요청 정보를 @RequestBody로 받기
 	@ResponseStatus(HttpStatus.CREATED) // 핸들러가 정상적으로 잘 수행이 됐을때 보내는 201값
-	public void create(@RequestBody CreateTodoCommand command) {
+	public void create(@RequestBody @Valid CreateTodoCommand command) {
 		logger.debug("requeest command: {}", command);
 		
 		editor.create(command.getTitle());
@@ -49,6 +53,8 @@ public class TodoRestController {
 	//자바 빈에 관련된 객체를 command라고 부른다.
 	static class CreateTodoCommand {
 		
+		@NotBlank
+		@Size(min =4, max = 140)
 		private String title;
 
 		public String getTitle() {
