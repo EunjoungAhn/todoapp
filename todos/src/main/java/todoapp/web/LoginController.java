@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import todoapp.web.model.SiteProperties;
 
@@ -35,12 +36,31 @@ public class LoginController {
 	
 	@PostMapping("/login")
 	//Servlet API로 클라이언트의 값 가져오기
-	public void loginProcess(HttpServletRequest request) {
-		//서버로 사용자의 입력 값을 가져온다.
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+	public void loginProcess(LoginCommand command) {
+		logger.debug("login command: {}", command);
+	}
+	
+	static class LoginCommand{
+		String username;
+		String password;
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
 		
-		logger.debug("login command: {}, {},", username, password);
+		@Override
+		public String toString() {
+			return "LoginComman [username=" + username + ", password=" + password + "]";
+		}
+		
 	}
 	
 }
