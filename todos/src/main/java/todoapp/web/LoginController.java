@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import todoapp.core.user.application.UserPasswordVerifier;
 import todoapp.core.user.application.UserRegistration;
 import todoapp.core.user.domain.UserEntityNotFoundException;
+import todoapp.core.user.domain.UserPasswordNotMatchedException;
 import todoapp.web.model.SiteProperties;
 
 @Controller
@@ -66,7 +67,14 @@ public class LoginController {
 		} catch(UserEntityNotFoundException error) {
 			//2. 사용자가 없는 경우: 회원가입 처리 후 로그인 처리
 			userRegistration.join(command.getUsername() , command.getPassword());
+		} 
+		/*
+		catch(UserPasswordNotMatchedException error){
+			//3. 비밀번호가 틀린 경우: 로그인 페이지로 돌려보내기
+			model.addAttribute("message", error.getMessage());
+			return "login";
 		}
+		*/
 		
 		return "redirect:/todos";
 	}
@@ -77,6 +85,13 @@ public class LoginController {
 		model.addAttribute("bindingResult", error.getBindingResult());
 		model.addAttribute("message", "입력 값이 없거나 올바르지 않아요.");
 		return "login";//로그인 페이지를 뷰로 사용하겠다. 라는 의미
+	}
+	
+	//비밀번호 예외 에러 핸들러
+	@ExceptionHandler(UserPasswordNotMatchedException.class)
+		public String handlerUserPasswordNotMatchedException(UserPasswordNotMatchedException error, Model model) {
+			model.addAttribute("message", error.getMessage());
+			return "login";
 	}
 	
 	static class LoginCommand{
