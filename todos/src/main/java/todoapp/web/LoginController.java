@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,8 +50,15 @@ public class LoginController {
 	@PostMapping("/login")
 	//Servlet API로 클라이언트의 값 가져오기
 	//LoginCommand 클래스의 @Size의 검증을 이해하기 위해서 @Valid을 붙여준다.
-	public String loginProcess(@Valid LoginCommand command) {
+	public String loginProcess(@Valid LoginCommand command, BindingResult bindingResult, Model model) {
 		logger.debug("login command: {}", command);
+		
+		//0. 입력 값 검증에 실패한 경우: 로그인 페이지로 돌려보내기
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("bindingResult", bindingResult);
+			model.addAttribute("message", "입력 값이 없거나 올바르지 않아요.");
+			return "login";//로그인 페이지를 뷰로 사용하겠다. 라는 의미
+		}
 		
 		try {
 			//1. 사용자 저장소에 사용자가 있을 경우: 비밀번호 확인 후 로그인 처리
