@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import todoapp.core.user.application.UserPasswordVerifier;
 import todoapp.core.user.application.UserRegistration;
@@ -25,6 +26,7 @@ import todoapp.core.user.domain.UserPasswordNotMatchedException;
 import todoapp.web.model.SiteProperties;
 
 @Controller
+@SessionAttributes("user") //유지할 모델의 키는 Session 수전에서 유지한다.
 public class LoginController {
 	
 	private final UserPasswordVerifier userPasswordVerifier;
@@ -53,7 +55,7 @@ public class LoginController {
 	@PostMapping("/login")
 	//Servlet API로 클라이언트의 값 가져오기
 	//LoginCommand 클래스의 @Size의 검증을 이해하기 위해서 @Valid을 붙여준다.
-	public String loginProcess(@Valid LoginCommand command, BindingResult bindingResult, Model model, HttpSession session) {
+	public String loginProcess(@Valid LoginCommand command, BindingResult bindingResult, Model model) {
 		logger.debug("login command: {}", command);
 		
 		//0. 입력 값 검증에 실패한 경우: 로그인 페이지로 돌려보내기
@@ -81,7 +83,9 @@ public class LoginController {
 		*/
 		
 		//담아준 user 객체를 세션에 넣어준다.
-		session.setAttribute("user", user);
+		//session.setAttribute("user", user);
+		//@SessionAttributes("user") 모델의 키는 Session 수전에서 유지한다.
+		model.addAttribute("user", user);
 		
 		return "redirect:/todos";
 	}
