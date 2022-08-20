@@ -80,7 +80,6 @@ public class LoginController {
 		}
 		*/
 		
-		
 		//담아준 user 객체를 세션에 넣어준다.
 		session.setAttribute("user", user);
 		
