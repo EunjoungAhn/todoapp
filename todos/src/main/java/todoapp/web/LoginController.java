@@ -1,10 +1,15 @@
 package todoapp.web;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +48,8 @@ public class LoginController {
 	
 	@PostMapping("/login")
 	//Servlet API로 클라이언트의 값 가져오기
-	public String loginProcess(LoginCommand command) {
+	//LoginCommand 클래스의 @Size의 검증을 이해하기 위해서 @Valid을 붙여준다.
+	public String loginProcess(@Valid LoginCommand command) {
 		logger.debug("login command: {}", command);
 		
 		try {
@@ -57,7 +63,17 @@ public class LoginController {
 		return "redirect:/todos";
 	}
 	
+	//컨트롤러에서 발생하는 에러가 아닌 직접 에러를 설정할 수 있다.(현재의 class 안에서만 유효)
+	@ExceptionHandler(BindException.class)
+	public String handleBindException(BindException error, Model model) {
+		model.addAttribute("bindingResult", error.getBindingResult());
+		model.addAttribute("message", "입력 값이 없거나 올바르지 않아요.");
+		return "login";//로그인 페이지를 뷰로 사용하겠다. 라는 의미
+	}
+	
 	static class LoginCommand{
+		
+		@Size(min = 4, max =20)
 		String username;
 		String password;
 		public String getUsername() {
