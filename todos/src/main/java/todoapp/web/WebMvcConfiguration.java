@@ -1,22 +1,29 @@
 package todoapp.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ObjectToStringHttpMessageConverter;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
+import todoapp.commons.web.servlet.ExecutionTimeHandlerInterceptor;
+import todoapp.commons.web.servlet.LoggingHandlerInterceptor;
 import todoapp.commons.web.view.CommaSeparatedValuesView;
 import todoapp.core.todos.domain.Todo;
 import todoapp.security.UserSessionRepository;
@@ -38,7 +45,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
     	resolvers.add(new UserSessionHandlerMethodArgumentResolver(userSessionRepository));
     }
-
+    
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		//핸들러는 추가하는 순서대로 동작한다.
+		registry.addInterceptor(new LoggingHandlerInterceptor());
+		registry.addInterceptor(new ExecutionTimeHandlerInterceptor());
+	}
+	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	// 리소스 핸들러를 등록해서 정적 자원을 처리할 수 있다.
@@ -76,6 +90,21 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		});
 		
 		converters.add(new ObjectToStringHttpMessageConverter(conversionService));
+	}
+	
+	
+	@Bean
+	public FilterRegistrationBean<CommonsRequestLoggingFilter> CommonsRequestLoggingFilter(){
+		CommonsRequestLoggingFilter commonsRequestLoggingFilter = new CommonsRequestLoggingFilter();
+		commonsRequestLoggingFilter.setIncludeHeaders(true);
+		commonsRequestLoggingFilter.setIncludePayload(true);
+		commonsRequestLoggingFilter.setIncludeClientInfo(true);
+		
+		FilterRegistrationBean<CommonsRequestLoggingFilter> filter = new FilterRegistrationBean<>();
+		filter.setFilter(new CommonsRequestLoggingFilter());
+		filter.setUrlPatterns(Collections.singletonList("/*")); //모든 요청 Url처리
+		
+		return filter;
 	}
 	
 	/*
