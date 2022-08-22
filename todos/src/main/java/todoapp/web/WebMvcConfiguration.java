@@ -27,6 +27,7 @@ import todoapp.commons.web.servlet.LoggingHandlerInterceptor;
 import todoapp.commons.web.view.CommaSeparatedValuesView;
 import todoapp.core.todos.domain.Todo;
 import todoapp.security.UserSessionRepository;
+import todoapp.security.web.servlet.RolesVerifyHandlerInterceptor;
 import todoapp.security.web.servlet.UserSessionHandlerMethodArgumentResolver;
 import todoapp.web.TodoController.TodoCsvViewResolver.TodoCsvView;
 
@@ -51,6 +52,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		//핸들러는 추가하는 순서대로 동작한다.
 		registry.addInterceptor(new LoggingHandlerInterceptor());
 		registry.addInterceptor(new ExecutionTimeHandlerInterceptor());
+		registry.addInterceptor(new RolesVerifyHandlerInterceptor(userSessionRepository));
 	}
 	
 	@Override

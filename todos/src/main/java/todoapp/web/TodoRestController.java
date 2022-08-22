@@ -3,6 +3,7 @@ package todoapp.web;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -28,6 +29,7 @@ import todoapp.core.todos.domain.Todo;
 
 @RestController
 @RequestMapping("/api/todos") //클래스 레벨에서 @RequestMapping을 하면 상속 관계 처럼 동작한다.
+@RolesAllowed("ROLE_USER")//할일의 목록을 조회하기 위해서는 로그인된 사용자만 접근가능 설정 추가
 public class TodoRestController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
