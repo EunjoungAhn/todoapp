@@ -18,16 +18,18 @@ import todoapp.web.model.UserProfile;
 @RestController
 public class UserRestController {
 	
+	/* 세션 정보를 핸드러의 인수로 받기 때문에 필요 없다.
 	private final UserSessionRepository userSessionRepository;
 	
 	public UserRestController(UserSessionRepository userSessionRepository) {
 		this.userSessionRepository = userSessionRepository;
 	}
+	*/
 	
 	@GetMapping("/api/user/profile")
 	//public ResponseEntity<UserProfile> userProfile(@SessionAttribute("user") User user){
-	public ResponseEntity<UserProfile> userProfile(){
-		UserSession userSession = userSessionRepository.get();
+	public ResponseEntity<UserProfile> userProfile(UserSession userSession){
+		//UserSession userSession = userSessionRepository.get(); //세션 정보를 핸드러의 인수로 받기 때문에 필요 없다.
 		//사용자 정보를 세션 정보로 부터 가져오기
 		//User user = (User) session.getAttribute("user");
 		//if(Objects.nonNull(user)) {

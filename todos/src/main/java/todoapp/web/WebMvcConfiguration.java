@@ -10,6 +10,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ObjectToStringHttpMessageConverter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
 import todoapp.commons.web.view.CommaSeparatedValuesView;
 import todoapp.core.todos.domain.Todo;
+import todoapp.security.UserSessionRepository;
+import todoapp.security.web.servlet.UserSessionHandlerMethodArgumentResolver;
 import todoapp.web.TodoController.TodoCsvViewResolver.TodoCsvView;
 
 /**
@@ -25,9 +28,18 @@ import todoapp.web.TodoController.TodoCsvViewResolver.TodoCsvView;
  *
  * @author springrunner.kr@gmail.com
  */
+@Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 	
+	@Autowired
+	private UserSessionRepository userSessionRepository;
+	
     @Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    	resolvers.add(new UserSessionHandlerMethodArgumentResolver(userSessionRepository));
+    }
+
+	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	// 리소스 핸들러를 등록해서 정적 자원을 처리할 수 있다.
     	
