@@ -28,6 +28,7 @@ import todoapp.commons.web.view.CommaSeparatedValuesView;
 import todoapp.core.todos.domain.Todo;
 import todoapp.security.UserSessionRepository;
 import todoapp.security.web.servlet.RolesVerifyHandlerInterceptor;
+import todoapp.security.web.servlet.UserSessionFilter;
 import todoapp.security.web.servlet.UserSessionHandlerMethodArgumentResolver;
 import todoapp.web.TodoController.TodoCsvViewResolver.TodoCsvView;
 
@@ -105,6 +106,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		FilterRegistrationBean<CommonsRequestLoggingFilter> filter = new FilterRegistrationBean<>();
 		filter.setFilter(new CommonsRequestLoggingFilter());
 		filter.setUrlPatterns(Collections.singletonList("/*")); //모든 요청 Url처리
+		
+		return filter;
+	}
+	
+	@Bean
+	public FilterRegistrationBean<UserSessionFilter> userSessionFilter(){
+		UserSessionFilter userSessionFilter = new UserSessionFilter(userSessionRepository);
+		
+		FilterRegistrationBean<UserSessionFilter> filter = new FilterRegistrationBean<UserSessionFilter>();
+		filter.setFilter(userSessionFilter);
+		filter.setUrlPatterns(Collections.singleton("/*"));
 		
 		return filter;
 	}

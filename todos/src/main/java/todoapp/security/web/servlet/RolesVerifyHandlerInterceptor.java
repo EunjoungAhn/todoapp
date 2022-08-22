@@ -37,6 +37,9 @@ public class RolesVerifyHandlerInterceptor implements HandlerInterceptor, RolesA
 
     @Override
     public final boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    	//Servlet 스펙으로 좀 유저 권한을 확인 할 수 있는 매서드
+    	//request.getUserPrincipal()
+    	//request.isUserInRole(null)
     	//핸들러가 어떤 타입인가/
     	if(handler instanceof HandlerMethod) {
     		//이 핸들어에 RolesAllowed 애노테이션이 선언되어 있는지 확인후, 가져오기
@@ -49,8 +52,9 @@ public class RolesVerifyHandlerInterceptor implements HandlerInterceptor, RolesA
     		if(Objects.nonNull(rolesAllowed)) {
     			log.debug("verify roles-allowed: {}", rolesAllowed);
     			//1.로그인이 되어 있는지?
-    			UserSession userSession = userSessionRepository.get();
-    			if(Objects.isNull(userSession)) {
+    			//UserSession userSession = userSessionRepository.get();
+    			//if(Objects.isNull(userSession)) {
+				if(Objects.isNull(request.getUserPrincipal())) {//현재 사용자의 정보를 가져온다.
     				//로그인이 안되어 있으면, 예외 발생
     				throw new UnauthorizedAccessException();
     			}
@@ -59,7 +63,8 @@ public class RolesVerifyHandlerInterceptor implements HandlerInterceptor, RolesA
     			//RolesAllowed Annotation이 가지고 있는 모든 역할을 꺼내서 그 역할이 UserSession이 가지고 있는지를 보고
     			//UserSession이 가지고 있는 역할만 필터링에서 꺼낸다.
     			Set<String> matchedRoles = Stream.of(rolesAllowed.value())
-    				.filter(role -> userSession.hasRole(role))
+    				//.filter(role -> userSession.hasRole(role))
+    				.filter(role -> request.isUserInRole(role))
     				.collect(Collectors.toSet());
     			
     			log.debug("matchedRoles roles {}", matchedRoles);
