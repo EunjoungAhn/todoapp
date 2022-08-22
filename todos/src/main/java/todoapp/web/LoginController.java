@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 import todoapp.core.user.application.UserPasswordVerifier;
 import todoapp.core.user.application.UserRegistration;
@@ -117,6 +120,13 @@ public class LoginController {
 		public String handlerUserPasswordNotMatchedException(UserPasswordNotMatchedException error, Model model) {
 			model.addAttribute("message", error.getMessage());
 			return "login";
+	}
+	
+	//로그아웃 처리 핸들러
+	@RequestMapping("/logout")
+	public View logout() {
+		userSessionRepository.clear();
+		return new RedirectView("/todos");
 	}
 	
 	static class LoginCommand{
